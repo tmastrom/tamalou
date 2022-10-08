@@ -34,24 +34,30 @@ const columns: readonly Column[] = [
 ];
 
 interface Data {
+  rowId: number;
   name: string;
   round1: number
   score: number;
 }
 
 function createData(
+  rowId: number,
   name: string,
   round1: number,
   score: number,
 ): Data {
-  return { name, round1, score };
+  return { rowId, name, round1, score };
 }
 
 const rows = [
-  createData('Player1', -10, -10),
-  createData('Player2', 14, 14),
-  createData('Player3', 26, 26),
+  createData(0, 'Player1', -10, -10),
+  createData(1, 'Player2', 14, 14),
+  createData(2, 'Player3', 26, 26),
 ];
+
+const handleClick = (rowId: number) => {
+  console.log(rowId);
+}
 
 export default function StickyHeadTable() {
   return (
@@ -74,7 +80,7 @@ export default function StickyHeadTable() {
           <TableBody>
             {rows.map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1}>
+                <TableRow hover role="checkbox" tabIndex={-1} onClick={() => handleClick(row.rowId)}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
