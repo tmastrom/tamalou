@@ -3,6 +3,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import RulesCard from './Rules';
+import ScoreTable from './ScoreTable';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -53,10 +55,10 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Game Rules
+        <RulesCard/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Score Card
+        <ScoreTable />
       </TabPanel>
     </Box>
   );
