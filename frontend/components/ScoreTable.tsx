@@ -49,42 +49,76 @@ function createData(
 }
 
 const rows = [
-  createData(0, 'Player1', -10),
-  createData(1, 'Player2', 14),
-  createData(2, 'Player3', 26),
+  createData(0, 'Player1', 0),
+  createData(1, 'Player2', 0),
+  createData(2, 'Player3', 0),
 ];
 
+const parseSignedIntString = (intStr: string) => {
+  let signedInt = 0;
+  if(intStr[0] === '-'){
+    console.log('is negative')
+    signedInt = -Math.abs(parseInt(intStr));
+  }
+  else {
+    signedInt = parseInt(intStr);
+  }
+  return signedInt;
+}
 
-export default function StickyHeadTable() {
+export default function ScoreTalbe() {
   const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<number | null>();
+  const [selectedRow, setSelectedRow] = useState<number>(0);
   const [add, setAdd] = useState<string>('');
   const [scoreObj, setScoreObj] = useState(rows); 
 
   const handleClickOpen = (rowId: number) => {
-    console.log(rowId);
     setSelectedRow(rowId);
     setOpen(true);
   };
 
-  // close modal and reset values
-  const handleClose = () => {
-    setOpen(false);
-    setAdd('');
-    setSelectedRow(null);
-  };
-
   const handleAddScore = () => {
-    let updateScore = scoreObj;
+    console.log('add score');
+    // create copies of current state
     const row = Number(selectedRow);
-    updateScore[row].score = updateScore[row].score + parseInt(add);
+    let updateScore = JSON.parse(JSON.stringify(scoreObj));
+    
+    // check if values are NaN
+    const newAdd = parseSignedIntString(add);
+
+    updateScore[row].score = updateScore[row].score + newAdd;
     setScoreObj(updateScore);
     handleClose();
   }
 
   const handleTextFieldChange = (e: any) => {
-    setAdd(e.target.value);
+    const regex = /^-?\d*\.?\d+$/;
+    console.log(e.target.value)
+    if(open){
+      if(e.target.value.match(regex) || e.target.value[0] === '-'){
+        console.log('regex matched');
+        setAdd(e.target.value);
+      }
+      else {
+        setAdd('');
+      }
+    }
   }
+
+  const handleReset = () => {
+    console.log('reset');
+    setScoreObj(rows);
+    setAdd('');
+    setSelectedRow(0);
+  }
+
+  // close modal and reset values
+  const handleClose = () => {
+    console.log('handle close');
+    setOpen(false);
+    setSelectedRow(0);
+    setAdd('');
+  };
   
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -124,13 +158,13 @@ export default function StickyHeadTable() {
         </Table>
       </TableContainer> 
       { open && 
-        <Dialog open={open} onClose={handleAddScore}>
-          <DialogTitle> add score for player { selectedRow }</DialogTitle>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle> add score for: { scoreObj[selectedRow].name }</DialogTitle>
           <DialogContent>
             <DialogContentText>
               
             </DialogContentText>
-            <TextField  value={add} onChange={(e) => handleTextFieldChange(e)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+            <TextField  value={add} onChange={(e) => handleTextFieldChange(e)} />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
@@ -138,6 +172,9 @@ export default function StickyHeadTable() {
           </DialogActions>
         </Dialog>
       }
+      <Button variant="contained" onClick={handleReset}>
+        New Game
+      </Button>
     </Paper>
   );
 }
