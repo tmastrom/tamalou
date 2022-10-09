@@ -32,7 +32,6 @@ const columns: readonly Column[] = [
     label: 'Score',
     minWidth: 170,
     align: 'right',
-    format: (value: number) => value.toFixed(2),
   },
 ];
 
@@ -56,24 +55,34 @@ const rows = [
   createData(2, 'Player3', 26),
 ];
 
+
 export default function StickyHeadTable() {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState(-1);
+  const [selectedRow, setSelectedRow] = React.useState(-1);
   const [add, setAdd] = React.useState(0);
+  const [scoreObj, setScoreObj] = React.useState(rows);  // | create default value for empty table
 
   const handleClickOpen = (rowId: number) => {
     console.log(rowId);
-    setSelected(rowId);
+    setSelectedRow(rowId);
     setOpen(true);
   };
 
-  const handleCancel = () => {
+  // close modal and reset values
+  const handleClose = () => {
     setOpen(false);
+    setAdd(0);
+    setSelectedRow(-1);
   };
 
-  const handleClose = () => {
-
-    setOpen(false);
+  const handleAddScore = () => {
+    // create intermediate state variable for modifying
+    let updateScore = scoreObj;
+    updateScore[selectedRow].score = Number(updateScore[selectedRow].score) + Number(add);
+    // set the updated score 
+    setScoreObj(updateScore);
+    // close the modal
+    handleClose();
   }
 
   const handleTextFieldChange = (e: any) => {
@@ -81,7 +90,6 @@ export default function StickyHeadTable() {
     setAdd(e.target.value);
   }
   
-
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -100,7 +108,7 @@ export default function StickyHeadTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
+            {scoreObj.map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} onClick={() => handleClickOpen(row.rowId)} key={row.rowId}>
                   {columns.map((column) => {
@@ -121,8 +129,8 @@ export default function StickyHeadTable() {
       </TableContainer> 
 
       { open && 
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle> add score for player { selected }</DialogTitle>
+        <Dialog open={open} onClose={handleAddScore}>
+          <DialogTitle> add score for player { selectedRow }</DialogTitle>
           <DialogContent>
             <DialogContentText>
               
@@ -130,12 +138,11 @@ export default function StickyHeadTable() {
             <TextField  value={add} onChange={(e) => handleTextFieldChange(e)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button onClick={handleClose}>Add</Button>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleAddScore}>Add</Button>
           </DialogActions>
         </Dialog>
       }
-
     </Paper>
   );
 }

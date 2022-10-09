@@ -55,10 +55,10 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <RulesCard/>
+        <ScoreTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ScoreTable />
+        <RulesCard/>
       </TabPanel>
     </Box>
   );
