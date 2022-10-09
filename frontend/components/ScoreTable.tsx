@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 interface Column {
-  id: 'name' | 'round1' |'score';
+  id: 'name' | 'score';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -17,13 +17,6 @@ interface Column {
 
 const columns: readonly Column[] = [
   { id: 'name', label: 'Name', minWidth: 170 },
-  {
-    id: 'round1',
-    label: 'Round 1',
-    minWidth: 170,
-    align: 'right',
-    format: (value: number) => value.toLocaleString('en-US'),
-  },
   {
     id: 'score',
     label: 'Score',
@@ -36,23 +29,21 @@ const columns: readonly Column[] = [
 interface Data {
   rowId: number;
   name: string;
-  round1: number
   score: number;
 }
 
 function createData(
   rowId: number,
   name: string,
-  round1: number,
   score: number,
 ): Data {
-  return { rowId, name, round1, score };
+  return { rowId, name, score };
 }
 
 const rows = [
-  createData(0, 'Player1', -10, -10),
-  createData(1, 'Player2', 14, 14),
-  createData(2, 'Player3', 26, 26),
+  createData(0, 'Player1', -10),
+  createData(1, 'Player2', 14),
+  createData(2, 'Player3', 26),
 ];
 
 const handleClick = (rowId: number) => {
@@ -80,7 +71,7 @@ export default function StickyHeadTable() {
           <TableBody>
             {rows.map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} onClick={() => handleClick(row.rowId)}>
+                <TableRow hover role="checkbox" tabIndex={-1} onClick={() => handleClick(row.rowId)} key={row.rowId}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
