@@ -7,6 +7,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
 interface Column {
   id: 'name' | 'score';
   label: string;
@@ -46,11 +56,32 @@ const rows = [
   createData(2, 'Player3', 26),
 ];
 
-const handleClick = (rowId: number) => {
-  console.log(rowId);
-}
-
 export default function StickyHeadTable() {
+  const [open, setOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState(-1);
+  const [add, setAdd] = React.useState(0);
+
+  const handleClickOpen = (rowId: number) => {
+    console.log(rowId);
+    setSelected(rowId);
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+
+    setOpen(false);
+  }
+
+  const handleTextFieldChange = (e: any) => {
+    console.log(e.target.value);
+    setAdd(e.target.value);
+  }
+  
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -71,7 +102,7 @@ export default function StickyHeadTable() {
           <TableBody>
             {rows.map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} onClick={() => handleClick(row.rowId)} key={row.rowId}>
+                <TableRow hover role="checkbox" tabIndex={-1} onClick={() => handleClickOpen(row.rowId)} key={row.rowId}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -88,6 +119,23 @@ export default function StickyHeadTable() {
           </TableBody>
         </Table>
       </TableContainer> 
+
+      { open && 
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle> add score for player { selected }</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              
+            </DialogContentText>
+            <TextField  value={add} onChange={(e) => handleTextFieldChange(e)} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button onClick={handleClose}>Add</Button>
+          </DialogActions>
+        </Dialog>
+      }
+
     </Paper>
   );
 }
