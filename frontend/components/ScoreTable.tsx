@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,7 +15,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 
 interface Column {
   id: 'name' | 'score';
@@ -57,10 +56,10 @@ const rows = [
 
 
 export default function StickyHeadTable() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedRow, setSelectedRow] = React.useState(-1);
-  const [add, setAdd] = React.useState(0);
-  const [scoreObj, setScoreObj] = React.useState(rows);  // | create default value for empty table
+  const [open, setOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<number | null>();
+  const [add, setAdd] = useState<string>('');
+  const [scoreObj, setScoreObj] = useState(rows); 
 
   const handleClickOpen = (rowId: number) => {
     console.log(rowId);
@@ -71,22 +70,19 @@ export default function StickyHeadTable() {
   // close modal and reset values
   const handleClose = () => {
     setOpen(false);
-    setAdd(0);
-    setSelectedRow(-1);
+    setAdd('');
+    setSelectedRow(null);
   };
 
   const handleAddScore = () => {
-    // create intermediate state variable for modifying
     let updateScore = scoreObj;
-    updateScore[selectedRow].score = Number(updateScore[selectedRow].score) + Number(add);
-    // set the updated score 
+    const row = Number(selectedRow);
+    updateScore[row].score = updateScore[row].score + parseInt(add);
     setScoreObj(updateScore);
-    // close the modal
     handleClose();
   }
 
   const handleTextFieldChange = (e: any) => {
-    console.log(e.target.value);
     setAdd(e.target.value);
   }
   
@@ -127,7 +123,6 @@ export default function StickyHeadTable() {
           </TableBody>
         </Table>
       </TableContainer> 
-
       { open && 
         <Dialog open={open} onClose={handleAddScore}>
           <DialogTitle> add score for player { selectedRow }</DialogTitle>
