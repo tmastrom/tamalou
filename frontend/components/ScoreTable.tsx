@@ -67,14 +67,16 @@ const parseSignedIntString = (intStr: string) => {
 }
 
 export default function ScoreTalbe() {
-  const [open, setOpen] = useState(false);
+  const [openScore, setOpenScore] = useState(false);
+  const [openPlayerAdd, setOpenPlayerAdd] = useState(false);
+  const [playerName, setPlayerName] = useState<string>('');
   const [selectedRow, setSelectedRow] = useState<number>(0);
-  const [add, setAdd] = useState<string>('');
+  const [addScore, setAddScore] = useState<string>('');
   const [scoreObj, setScoreObj] = useState(rows); 
 
   const handleClickOpen = (rowId: number) => {
     setSelectedRow(rowId);
-    setOpen(true);
+    setOpenScore(true);
   };
 
   const handleAddScore = () => {
@@ -84,40 +86,71 @@ export default function ScoreTalbe() {
     let updateScore = JSON.parse(JSON.stringify(scoreObj));
     
     // check if values are NaN
-    const newAdd = parseSignedIntString(add);
+    const newAdd = parseSignedIntString(addScore);
 
     updateScore[row].score = updateScore[row].score + newAdd;
     setScoreObj(updateScore);
-    handleClose();
+    handleCloseScore();
+  }
+
+  const handlePlayerName = (e: any) => {
+    console.log(e.target.value);
+    if(openPlayerAdd){
+        setPlayerName(e.target.value);
+    }
   }
 
   const handleTextFieldChange = (e: any) => {
     const regex = /^-?\d*\.?\d+$/;
-    console.log(e.target.value)
-    if(open){
+    console.log(e.target.value);
+    if(openScore){
       if(e.target.value.match(regex) || e.target.value[0] === '-'){
         console.log('regex matched');
-        setAdd(e.target.value);
+        setAddScore(e.target.value);
       }
       else {
-        setAdd('');
+        setAddScore('');
       }
     }
+  }
+
+  const handleAddPlayer = (e: any) => {
+    console.log('add player');
+    let updateScoreObj = scoreObj;
+    const ind = scoreObj.length + 1;
+
+    updateScoreObj.push(createData(ind, playerName, 0));
+
+    setScoreObj(updateScoreObj);
+
+    handlClosePlayerAdd();  
   }
 
   const handleReset = () => {
     console.log('reset');
     setScoreObj(rows);
-    setAdd('');
+    setAddScore('');
     setSelectedRow(0);
   }
 
+  const handleOpenAddPlayer = () => {
+    console.log('open add player modal');
+    // open modal to enter name 
+    setOpenPlayerAdd(true);
+  }
+
+  const handlClosePlayerAdd = () => {
+    console.log('handle close score');
+    setPlayerName('');
+    setOpenPlayerAdd(false);
+  }
+
   // close modal and reset values
-  const handleClose = () => {
-    console.log('handle close');
-    setOpen(false);
+  const handleCloseScore = () => {
+    console.log('handle close score');
+    setOpenScore(false);
     setSelectedRow(0);
-    setAdd('');
+    setAddScore('');
   };
   
   return (
@@ -157,17 +190,17 @@ export default function ScoreTalbe() {
           </TableBody>
         </Table>
       </TableContainer> 
-      { open && 
-        <Dialog open={open} onClose={handleClose}>
+      { openScore && 
+        <Dialog open={openScore} onClose={handleCloseScore}>
           <DialogTitle> add score for: { scoreObj[selectedRow].name }</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              
+              Add Score
             </DialogContentText>
-            <TextField  value={add} onChange={(e) => handleTextFieldChange(e)} />
+            <TextField  value={addScore} onChange={(e) => handleTextFieldChange(e)} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleCloseScore}>Cancel</Button>
             <Button onClick={handleAddScore}>Add</Button>
           </DialogActions>
         </Dialog>
@@ -175,6 +208,29 @@ export default function ScoreTalbe() {
       <Button variant="contained" onClick={handleReset}>
         New Game
       </Button>
+
+
+      <Button variant="contained" onClick={handleOpenAddPlayer}>
+        Add Player
+      </Button>
+
+
+
+      { openPlayerAdd && 
+        <Dialog open={openPlayerAdd} onClose={handlClosePlayerAdd}>
+          <DialogTitle> Enter Player Name</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              
+            </DialogContentText>
+            <TextField value={playerName} onChange={(e) => handlePlayerName(e)} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handlClosePlayerAdd}>Cancel</Button>
+            <Button onClick={handleAddPlayer}>Add</Button>
+          </DialogActions>
+        </Dialog>
+      }
     </Paper>
   );
 }
