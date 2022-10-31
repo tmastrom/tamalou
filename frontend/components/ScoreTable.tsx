@@ -48,16 +48,9 @@ function createData(
   return { rowId, name, score };
 }
 
-const rows = [
-  createData(0, 'Player1', 0),
-  createData(1, 'Player2', 0),
-  createData(2, 'Player3', 0),
-];
-
 const parseSignedIntString = (intStr: string) => {
   let signedInt = 0;
   if(intStr[0] === '-'){
-    console.log('is negative')
     signedInt = -Math.abs(parseInt(intStr));
   }
   else {
@@ -65,6 +58,10 @@ const parseSignedIntString = (intStr: string) => {
   }
   return signedInt;
 }
+
+const rows = [
+  createData(0, 'Player1', 0),
+];
 
 export default function ScoreTalbe() {
   const [openScore, setOpenScore] = useState(false);
@@ -117,7 +114,7 @@ export default function ScoreTalbe() {
   const handleAddPlayer = (e: any) => {
     console.log('add player');
     let updateScoreObj = scoreObj;
-    const ind = scoreObj.length + 1;
+    const ind = scoreObj.length;
     updateScoreObj.push(createData(ind, playerName, 0));
     setScoreObj(updateScoreObj);
     handlClosePlayerAdd();  
@@ -158,8 +155,6 @@ export default function ScoreTalbe() {
     update.splice(row, 1)
     // reorder indexes of scoerobj
     for(let i = 0; i < update.length; i += 1){
-      console.log(i);
-      console.log(update[i]);
       update[i].rowId = i;
     } 
     // set new scoreObj
@@ -167,6 +162,9 @@ export default function ScoreTalbe() {
     // close modal
     handleCloseScore();
   }
+
+  console.log(scoreObj);
+  console.log(selectedRow);
   
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
