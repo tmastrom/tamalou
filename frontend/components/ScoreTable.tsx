@@ -91,7 +91,6 @@ export default function ScoreTalbe() {
   }
 
   const handlePlayerName = (e: any) => {
-    console.log(e.target.value);
     if(openPlayerAdd){
         setPlayerName(e.target.value);
     }
@@ -99,10 +98,8 @@ export default function ScoreTalbe() {
 
   const handleTextFieldChange = (e: any) => {
     const regex = /^-?\d*\.?\d+$/;
-    console.log(e.target.value);
     if(openScore){
       if(e.target.value.match(regex) || e.target.value[0] === '-'){
-        console.log('regex matched');
         setAddScore(e.target.value);
       }
       else {
@@ -162,9 +159,6 @@ export default function ScoreTalbe() {
     // close modal
     handleCloseScore();
   }
-
-  console.log(scoreObj);
-  console.log(selectedRow);
   
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
