@@ -118,11 +118,8 @@ export default function ScoreTalbe() {
     console.log('add player');
     let updateScoreObj = scoreObj;
     const ind = scoreObj.length + 1;
-
     updateScoreObj.push(createData(ind, playerName, 0));
-
     setScoreObj(updateScoreObj);
-
     handlClosePlayerAdd();  
   }
 
@@ -152,6 +149,24 @@ export default function ScoreTalbe() {
     setSelectedRow(0);
     setAddScore('');
   };
+
+  const handleDeletePlayer = () => {
+    console.log('handle delete player');
+    const row = selectedRow;
+    let update = [...scoreObj]; 
+    // delete player from selected row 
+    update.splice(row, 1)
+    // reorder indexes of scoerobj
+    for(let i = 0; i < update.length; i += 1){
+      console.log(i);
+      console.log(update[i]);
+      update[i].rowId = i;
+    } 
+    // set new scoreObj
+    setScoreObj(update);
+    // close modal
+    handleCloseScore();
+  }
   
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -202,20 +217,16 @@ export default function ScoreTalbe() {
           <DialogActions>
             <Button onClick={handleCloseScore}>Cancel</Button>
             <Button onClick={handleAddScore}>Add</Button>
+            <Button onClick={handleDeletePlayer}>Delete</Button>
           </DialogActions>
         </Dialog>
       }
       <Button variant="contained" onClick={handleReset}>
         New Game
       </Button>
-
-
       <Button variant="contained" onClick={handleOpenAddPlayer}>
         Add Player
       </Button>
-
-
-
       { openPlayerAdd && 
         <Dialog open={openPlayerAdd} onClose={handlClosePlayerAdd}>
           <DialogTitle> Enter Player Name</DialogTitle>
