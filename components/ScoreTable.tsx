@@ -63,7 +63,7 @@ const rows = [
   createData(0, 'Player1', 0),
 ];
 
-export default function ScoreTalbe() {
+export default function ScoreTable() {
   const [openScore, setOpenScore] = useState(false);
   const [openPlayerAdd, setOpenPlayerAdd] = useState(false);
   const [playerName, setPlayerName] = useState<string>('');
