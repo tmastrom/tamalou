@@ -1,11 +1,19 @@
 import type { NextPage } from 'next'
 import * as React from 'react';
 import BasicTabs from '../components/BasicTabs';
+import Button from '@mui/material/Button';
 
-const Home: NextPage = () => {
+type HomeProps = {
+  toggleTheme?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+const Home: NextPage = (props: HomeProps) => {
   return (
     <>
-      <BasicTabs />  
+      <BasicTabs /> 
+      {/* <Button onClick={props.toggleTheme}>
+        Toggle Theme
+      </Button> */}
     </>
   )
 }
