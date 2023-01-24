@@ -5,19 +5,20 @@ export default function RulesCard() {
     <>
       <div>How to play</div>
       <p>
-      deal four(4) cards to each player  <br/>
-      place them face down <br/>
-      arrange in a horizontal row <br/>
-      players can look at the two cards on the edge just once before the game starts  <br/>
+      deal 4 cards to each player face down <br/>
+      players can look at the two cards on the edge only once before the game starts  <br/>
       burn one card off the top of the deck <br/>
       player to the left of the dealer starts by picking a card off the top of the deck  <br/>
       they can replace one of their cards or discard the card  <br/>
-      if a jack is played into the middle, you can look at one of your cards  <br/>
-      if a queen is played into the middle, you can blindly swap cards with another player <br/>
-      if you get a king, you can look at one of your oppents cards and decide if you want to swap with them  <br/>
-      if someone discards into the middle and you have one of those cards, you can put it down and get rid of one of your cards,  <br/>
+      if a jack is played, draw again  <br/>
+      if a queen is played, you can blindly swap cards with another player <br/>
+      if a king is played, you can look at one of your own cards<br/>
+      if someone discards into the middle and you have one of those cards, you can stack it and get rid of one of your cards  <br/>
+      only one matching card can be stacked, subsequent stacks mean you draw a card <br/>
+      you can also stack an opponents card, if you are successful you give one of your cards to the play whose card you stacked <br/>
+      unsuccessful stacks mean you must draw a card <br/>
       if you're wrong and they do not match, you take another card and add it to your hand  <br/>
-      if you have 5 points in your hand or lower, you can call "tamaloo", <br/>
+      if you have 5 points in your hand or lower, you can call "tamalou", <br/>
       the rest of the players play one more round <br/>
       during the last round, you can only swap with the calling player by using a King <br/>
       the round is over and players show their cards 
@@ -25,10 +26,15 @@ export default function RulesCard() {
 
       <div>Scoring</div>
       <p>
-      player calls and has lowest hand -10
-      player calls and doesn't have lowest hand - hand value +10?
-      any other player - face value of cards 
-      player is out when they hit 50 points
+        Point Value <br/>
+        A-9: 1-9 <br/>
+        Face cards: 10 <br/>
+      </p>
+      <p>
+      player calls and has lowest hand = -10 <br/>
+      player calls and doesn't have lowest hand - hand value +10 <br/>
+      any other player - face value of cards <br/>
+      play until loser gets to 50 or winner gets to -50
       </p>
 
       <div>Edge Cases</div>

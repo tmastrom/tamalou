@@ -6,8 +6,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-
-
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -19,17 +17,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface Column {
   id: 'name' | 'score';
   label: string;
-  minWidth?: number;
   align?: 'right';
   format?: (value: number) => string;
 }
 
 const columns: readonly Column[] = [
-  { id: 'name', label: 'Name', minWidth: 170 },
+  { id: 'name', label: 'Name'},
   {
     id: 'score',
     label: 'Score',
-    minWidth: 170,
     align: 'right',
   },
 ];
@@ -77,13 +73,10 @@ export default function ScoreTable() {
   };
 
   const handleAddScore = () => {
-    console.log('add score');
     // create copies of current state
     const row = Number(selectedRow);
     let updateScore = JSON.parse(JSON.stringify(scoreObj));
-    
-    // check if values are NaN
-    const newAdd = parseSignedIntString(addScore);
+    const newAdd = addScore == ''? 0 : parseSignedIntString(addScore);
 
     updateScore[row].score = updateScore[row].score + newAdd;
     setScoreObj(updateScore);
@@ -109,7 +102,6 @@ export default function ScoreTable() {
   }
 
   const handleAddPlayer = (e: any) => {
-    console.log('add player');
     let updateScoreObj = scoreObj;
     const ind = scoreObj.length;
     updateScoreObj.push(createData(ind, playerName, 0));
@@ -118,34 +110,29 @@ export default function ScoreTable() {
   }
 
   const handleReset = () => {
-    console.log('reset');
     setScoreObj(rows);
     setAddScore('');
     setSelectedRow(0);
   }
 
   const handleOpenAddPlayer = () => {
-    console.log('open add player modal');
     // open modal to enter name 
     setOpenPlayerAdd(true);
   }
 
   const handlClosePlayerAdd = () => {
-    console.log('handle close score');
     setPlayerName('');
     setOpenPlayerAdd(false);
   }
 
   // close modal and reset values
   const handleCloseScore = () => {
-    console.log('handle close score');
     setOpenScore(false);
     setSelectedRow(0);
     setAddScore('');
   };
 
   const handleDeletePlayer = () => {
-    console.log('handle delete player');
     const row = selectedRow;
     let update = [...scoreObj]; 
     // delete player from selected row 
@@ -170,7 +157,6 @@ export default function ScoreTable() {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
                 >
                   {column.label}
                 </TableCell>
