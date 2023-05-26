@@ -19,7 +19,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import Stack from '@mui/material/Stack';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -112,7 +112,7 @@ export default function BasicTabs() {
   const [playerName, setPlayerName] = useState<string>('');
   const [selectedRow, setSelectedRow] = useState<number>(0);
   const [addScore, setAddScore] = useState<string>('');
-  const [scoreObj, setScoreObj] = useState(rows); 
+  const [scoreObj, setScoreObj] = useState(rows);
 
   const handleClickOpen = (rowId: number) => {
     setSelectedRow(rowId);
@@ -153,7 +153,7 @@ export default function BasicTabs() {
     const ind = scoreObj.length;
     updateScoreObj.push(createData(ind, playerName, 0));
     setScoreObj(updateScoreObj);
-    handlClosePlayerAdd();  
+    handlClosePlayerAdd();
   }
 
   const handleReset = () => {
@@ -163,7 +163,7 @@ export default function BasicTabs() {
   }
 
   const handleOpenAddPlayer = () => {
-    // open modal to enter name 
+    // open modal to enter name
     setOpenPlayerAdd(true);
   }
 
@@ -181,13 +181,13 @@ export default function BasicTabs() {
 
   const handleDeletePlayer = () => {
     const row = selectedRow;
-    let update = [...scoreObj]; 
-    // delete player from selected row 
+    let update = [...scoreObj];
+    // delete player from selected row
     update.splice(row, 1)
     // reorder indexes of scoerobj
     for(let i = 0; i < update.length; i += 1){
       update[i].rowId = i;
-    } 
+    }
     // set new scoreObj
     setScoreObj(update);
     // close modal
@@ -239,8 +239,8 @@ export default function BasicTabs() {
                 })}
               </TableBody>
             </Table>
-          </TableContainer> 
-          { openScore && 
+          </TableContainer>
+          { openScore &&
             <Dialog open={openScore} onClose={handleCloseScore}>
               <DialogTitle> add score for: { scoreObj[selectedRow].name }</DialogTitle>
               <DialogContent>
@@ -256,18 +256,21 @@ export default function BasicTabs() {
               </DialogActions>
             </Dialog>
           }
-          <Button variant="contained" onClick={handleReset}>
-            New Game
-          </Button>
-          <Button variant="contained" onClick={handleOpenAddPlayer}>
-            Add Player
-          </Button>
-          { openPlayerAdd && 
+          <div style={{ margin: '1rem'}}>
+            <Stack spacing={2} direction="row">
+              <Button variant="contained" onClick={handleReset}>
+                New Game
+              </Button>
+              <Button className="button-spacing" variant="contained" onClick={handleOpenAddPlayer}>
+                Add Player
+              </Button>
+            </Stack>
+          </div>
+          { openPlayerAdd &&
             <Dialog open={openPlayerAdd} onClose={handlClosePlayerAdd}>
-              <DialogTitle> Enter Player Name</DialogTitle>
+              <DialogTitle style={{margin: '1rem'}}> Enter Player Name </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  
                 </DialogContentText>
                 <TextField value={playerName} onChange={(e) => handlePlayerName(e)} />
               </DialogContent>
